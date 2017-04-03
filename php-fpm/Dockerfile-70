@@ -14,6 +14,25 @@ FROM laradock/php-fpm:7.0--1.2
 
 MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 
+
+RUN apt-get update -qq \
+	&& apt-get install -y locales -qq \ 
+	&& locale-gen en_US.UTF-8 en_us  \
+	&& locale-gen zh_CN.UTF-8 zh_cn  \
+	&& locale-gen ug_CN ug_cn  
+
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    sed -i -e 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen && \
+    sed -i -e 's/# ug_CN UTF-8/ug_CN UTF-8/' /etc/locale.gen && \
+    echo 'LANG="en_US.UTF-8"'>/etc/default/locale && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
+COPY ./sources.list /etc/apt/sources.list
 #
 #--------------------------------------------------------------------------
 # Mandatory Software's Installation
@@ -191,6 +210,19 @@ ARG INSTALL_TOKENIZER=false
 RUN if [ ${INSTALL_TOKENIZER} = true ]; then \
      docker-php-ext-install tokenizer \
 ;fi
+
+
+###############
+# Install gettext
+##############
+ARG INSTALL_GETTEXT=false
+RUN if [ ${INSTALL_GETTEXT} = true ]; then \
+     apt-get -y update && \
+     apt-get -y install gettext php-gettext && \
+     docker-php-ext-install gettext \
+;fi
+
+
 
 #####################################
 # SQL SERVER:

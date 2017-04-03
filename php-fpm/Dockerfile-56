@@ -162,6 +162,15 @@ RUN if [ ${INSTALL_TOKENIZER} = true ]; then \
      docker-php-ext-install tokenizer \
 ;fi
 
+
+###############
+# Install gettext
+##############
+ARG INSTALL_GETTEXT=false
+RUN if [ ${INSTALL_GETTEXT} = true ]; then \
+     docker-php-ext-install gettext \
+;fi
+
 #
 #--------------------------------------------------------------------------
 # Final Touch
