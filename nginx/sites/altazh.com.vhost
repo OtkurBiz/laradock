@@ -8,6 +8,11 @@ server {
   client_max_body_size 100M;
   fastcgi_read_timeout 1800;
 
+
+  access_log  /var/log/nginx/altazh.com_nginx.log;
+  error_log /var/log/nginx/altazh.com_error.log;
+
+
   location / {
     try_files $uri $uri/ /index.php?$query_string;
     #try_files $uri $uri/ /index.php$is_args$args;

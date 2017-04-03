@@ -32,6 +32,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
+
 COPY ./sources.list /etc/apt/sources.list
 #
 #--------------------------------------------------------------------------
@@ -336,6 +337,7 @@ ADD ./laravel.pool.conf /usr/local/etc/php-fpm.d/
 RUN rm -r /var/lib/apt/lists/*
 
 RUN usermod -u 1000 www-data
+RUN groupmod -g 1000 www-data
 
 WORKDIR /var/www
 
